@@ -23,24 +23,52 @@ import "../style/index.css";
     }
  */
 function render(variables = {}) {
+  // eslint-disable-next-line no-console
   console.log("These are the current variables: ", variables); //print on the console
   // here we ask the logical questions to make decisions on how to build the html
   // if includeCover==false then we reset the cover code without the <img> tag to make the cover transparent.
+
   let cover = `<div class="cover"><img src="${variables.background}" /></div>`;
-  if (variables.includeCover == false) cover = "<div class='cover'></div>";
+  if (variables.includeCover == false) cover = "<div class='cover'></div>"; // se puede hacer en más de una línea si uso {} de condicional
+
+  if (!variables.name) variables.name = "";
+  if (!variables.lastname) variables.lastname = "";
+  let nombreCompleto = variables.name + " " + variables.lastname;
+  if (nombreCompleto == null) nombreCompleto = "prueba";
+
+  if (!variables.role) variables.role = "";
+  if (!variables.city) variables.city = "";
+  if (!variables.country) variables.country = "";
+
+  /*
+  let twitter = `<li><a href="https://twitter.com/${variables.twitter}"><i class="fab fa-twitter"></i></a></li>`;
+  if (!variables.twitter) twitter = "";
+  let github = `<li><a href="https://github.com/${variables.github}"><i class="fab fa-github"></i></a></li>`;
+  if (!variables.github) github = "";
+  let linkedin = `<li><a href="https://linkedin.com/${variables.linkedin}"><i class="fab fa-linkedin"></i></a></li>`;
+  if (!variables.linkedin) linkedin = "";
+  let instagram = `<li><a href="https://instagram.com/${variables.instagram}"><i class="fab fa-instagram"></i></a></li>`;
+  if (!variables.instagram) instagram = "";
+ */
+  let redes = ["twitter", "github", "linkedin", "instagram"];
+  let redesHtml = [];
+  redes.forEach(red => {
+    if (variables[red]) {
+      redesHtml.push(
+        `<li><a href="https://${red}.com/${variables[red]}"><i class="fab fa-${red}"></i></a></li>`
+      );
+    }
+  });
 
   // reset the website body with the new html output
   document.querySelector("#widget_content").innerHTML = `<div class="widget">
             ${cover}
           <img src="${variables.avatarURL}" class="photo" />
-          <h1>${variables.name} ${variables.lastname}</h1>
+          <h1>${nombreCompleto}</h1>
           <h2>${variables.role}</h2>
           <h3>${variables.city}, ${variables.country}</h3>
           <ul class="${variables.socialMediaPosition}">
-            <li><a href="https://twitter.com/${variables.twitter}"><i class="fab fa-twitter"></i></a></li>
-            <li><a href="https://github.com/${variables.github}"><i class="fab fa-github"></i></a></li>
-            <li><a href="https://linkedin.com/${variables.linkedin}"><i class="fab fa-linkedin"></i></a></li>
-            <li><a href="https://instagram.com/${variables.instagram}"><i class="fab fa-instagram"></i></a></li>
+            ${redesHtml}
           </ul>
         </div>
     `;
